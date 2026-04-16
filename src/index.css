@@ -53,11 +53,46 @@ nav {
   max-width: 1280px; margin: 0 auto;
 }
 
-.logo {
+.brand-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.brand-name {
   font-family: 'Manrope', sans-serif;
   font-weight: 800; font-size: 1.2rem;
   color: var(--primary); letter-spacing: -0.5px;
   text-decoration: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.admin-logo-button {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 1px solid rgba(86,25,34,0.2);
+  background:
+    radial-gradient(circle at 30% 25%, rgba(255,255,255,0.75), transparent 35%),
+    linear-gradient(135deg, var(--primary), var(--primary-container));
+  color: white;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  box-shadow: 0 10px 24px rgba(86,25,34,0.18);
+  transition: transform 0.2s, box-shadow 0.2s, opacity 0.2s;
+}
+.admin-logo-button:hover,
+.admin-logo-button.active {
+  opacity: 0.95;
+  transform: translateY(-1px) scale(1.04);
+  box-shadow: 0 14px 28px rgba(86,25,34,0.24);
 }
 
 .nav-links { display: flex; align-items: center; gap: 2rem; }
@@ -405,6 +440,12 @@ nav {
 .contact-status.error { color: #a33131; }
 
 /* ADMIN */
+.admin-page {
+  min-height: 100vh;
+  background: var(--surface-container-low);
+  padding-top: 4.5rem;
+}
+
 .section-admin {
   padding: 6rem 5%;
   background: var(--surface-container-low);

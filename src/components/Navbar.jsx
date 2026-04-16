@@ -1,12 +1,27 @@
 import React from "react";
 
-export default function Navbar({ activeSection, scrollTo }) {
+export default function Navbar({ activeSection, isAdminPage = false, onBrandClick, onAdminClick, scrollTo }) {
+  const sections = ["home", "proficiency", "projects", "about", "contact"];
+
   return (
     <nav>
       <div className="nav-inner">
-        <span className="logo">Tejaswin.M</span>
+        <div className="brand-wrap">
+          <button className="brand-name" type="button" onClick={onBrandClick}>
+            Tejaswini M
+          </button>
+          <button
+            className={`admin-logo-button ${isAdminPage ? "active" : ""}`}
+            type="button"
+            onClick={onAdminClick}
+            aria-label="Open admin portal"
+            title="Open admin portal"
+          >
+            TM
+          </button>
+        </div>
         <div className="nav-links">
-          {["home", "proficiency", "projects", "about", "contact", "admin"].map((section) => (
+          {sections.map((section) => (
             <button
               key={section}
               className={`nav-link ${activeSection === section ? "active" : ""}`}

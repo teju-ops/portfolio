@@ -10,10 +10,19 @@ import Footer from "./components/Footer";
 import "./index.css";
 
 export default function App() {
+  const [currentPath, setCurrentPath] = useState(() => window.location.pathname);
   const [scrollProgress, setScrollProgress] = useState(0);
   const [activeSection, setActiveSection] = useState("home");
   const revealRefs = useRef([]);
   const observerRef = useRef(null);
+  const isAdminPage = currentPath === "/admin";
+
+  useEffect(() => {
+    const syncPath = () => setCurrentPath(window.location.pathname);
+
+    window.addEventListener("popstate", syncPath);
+    return () => window.removeEventListener("popstate", syncPath);
+  }, []);
 
   useEffect(() => {
     const onScroll = () => {
@@ -21,7 +30,7 @@ export default function App() {
       const pct = h.scrollTop / (h.scrollHeight - h.clientHeight);
       setScrollProgress(pct);
 
-      const sections = ["home", "proficiency", "projects", "about", "contact", "admin"];
+      const sections = ["home", "proficiency", "projects", "about", "contact"];
       for (const id of sections) {
         const el = document.getElementById(id);
         if (el) {
@@ -54,21 +63,66 @@ export default function App() {
     }
   }, []);
 
+  const navigateToHome = () => {
+    if (window.location.pathname !== "/") {
+      window.history.pushState(null, "", "/");
+      setCurrentPath("/");
+    }
+  };
+
+  const openAdminPage = () => {
+    window.history.pushState(null, "", "/admin");
+    setCurrentPath("/admin");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
   const scrollTo = (id) => {
+    navigateToHome();
+    window.requestAnimationFrame(() => {
+      document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+    });
+  };
+
+  const scrollHome = (id) => {
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
   };
+
+  if (isAdminPage) {
+    return (
+      <>
+        <div className="scroll-progress" style={{ transform: "scaleX(0)" }} />
+        <Navbar
+          activeSection="admin"
+          isAdminPage
+          onBrandClick={() => {
+            navigateToHome();
+            window.scrollTo({ top: 0, behavior: "smooth" });
+          }}
+          onAdminClick={openAdminPage}
+          scrollTo={scrollTo}
+        />
+        <main className="admin-page">
+          <AdminPanel addReveal={addReveal} />
+        </main>
+      </>
+    );
+  }
 
   return (
     <>
       <div className="scroll-progress" style={{ transform: `scaleX(${scrollProgress})` }} />
-      <Navbar activeSection={activeSection} scrollTo={scrollTo} />
-      <Hero scrollTo={scrollTo} />
+      <Navbar
+        activeSection={activeSection}
+        onBrandClick={() => scrollHome("home")}
+        onAdminClick={openAdminPage}
+        scrollTo={scrollTo}
+      />
+      <Hero scrollTo={scrollHome} />
       <Proficiency addReveal={addReveal} />
       <Projects addReveal={addReveal} />
       <About addReveal={addReveal} />
       <Contact addReveal={addReveal} />
-      <AdminPanel addReveal={addReveal} />
-      <Footer scrollTo={scrollTo} />
+      <Footer scrollTo={scrollHome} />
     </>
   );
 }
