@@ -12,9 +12,11 @@ export default function Hero({ scrollTo }) {
             Mahajan
           </h1>
           <p className="hero-desc">
-            A passionate developer focused on building resilient software systems and intelligent user experiences.
-            Currently pursuing Electronics and Telecommunication at DSCE, bridging the gap between hardware efficiency
-            and modern software architecture.
+            Detail-oriented and result-driven developer with skills in building responsive and user-friendly web
+            applications using React.js, HTML, CSS, and JavaScript. Skilled in developing RESTful APIs using Node.js
+            and Express.js and working with MongoDB for database management. Strong understanding of component-based
+            architecture, state management, API integration, and CRUD operations. Passionate about clean code,
+            continuous learning, and scalable full-stack application development.
           </p>
           <div className="hero-btns">
             <button className="btn-primary" onClick={() => scrollTo("projects")}>

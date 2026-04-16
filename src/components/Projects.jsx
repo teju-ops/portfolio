@@ -46,7 +46,7 @@ export default function Projects({ addReveal }) {
 
       {/* IEEE Publication Banner */}
       <section className="section-ieee">
-        <div className="ieee-inner">
+        <a className="ieee-inner ieee-download" href="/assets/research-paper.pdf" download>
           <span className="ieee-icon">📄</span>
           <div>
             <div className="ieee-label">IEEE Paper Publication</div>
@@ -56,7 +56,7 @@ export default function Projects({ addReveal }) {
               focusing on instruction execution, pipeline stages, and performance optimization.
             </div>
           </div>
-        </div>
+        </a>
       </section>
     </>
   );
