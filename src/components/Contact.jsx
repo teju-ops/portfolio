@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { buildApiUrl } from "../lib/api";
+import { buildApiUrl, parseApiResponse } from "../lib/api";
 
 export default function Contact({ addReveal }) {
   const [formData, setFormData] = useState({
@@ -41,7 +41,10 @@ export default function Contact({ addReveal }) {
         body: JSON.stringify(trimmedData),
       });
 
-      const result = await response.json();
+      const result = await parseApiResponse(
+        response,
+        "Unable to send your message right now."
+      );
 
       if (!response.ok) {
         throw new Error(result.message || "Unable to send your message right now.");

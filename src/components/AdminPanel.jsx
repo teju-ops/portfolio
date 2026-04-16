@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { buildApiUrl } from "../lib/api";
+import { buildApiUrl, parseApiResponse } from "../lib/api";
 
 const ADMIN_TOKEN_KEY = "portfolio_admin_token";
 const ADMIN_EMAIL_KEY = "portfolio_admin_email";
@@ -37,7 +37,7 @@ export default function AdminPanel({ addReveal }) {
           Authorization: `Bearer ${token}`,
         },
       });
-      const result = await response.json();
+      const result = await parseApiResponse(response, "Failed to load contacts.");
 
       if (!response.ok) {
         throw new Error(result.message || "Failed to load contacts.");
@@ -74,7 +74,7 @@ export default function AdminPanel({ addReveal }) {
           password,
         }),
       });
-      const result = await response.json();
+      const result = await parseApiResponse(response, "Admin login failed.");
 
       if (!response.ok) {
         throw new Error(result.message || "Admin login failed.");
@@ -111,7 +111,7 @@ export default function AdminPanel({ addReveal }) {
         headers: buildAuthHeaders(),
         body: JSON.stringify({ status: nextStatus }),
       });
-      const result = await response.json();
+      const result = await parseApiResponse(response, "Failed to update status.");
 
       if (!response.ok) {
         throw new Error(result.message || "Failed to update status.");
@@ -145,7 +145,7 @@ export default function AdminPanel({ addReveal }) {
         headers: buildAuthHeaders(),
         body: JSON.stringify({ message: replyMessage }),
       });
-      const result = await response.json();
+      const result = await parseApiResponse(response, "Failed to send reply.");
 
       if (!response.ok) {
         throw new Error(result.message || "Failed to send reply.");
@@ -176,7 +176,7 @@ export default function AdminPanel({ addReveal }) {
           Authorization: `Bearer ${adminToken}`,
         },
       });
-      const result = await response.json();
+      const result = await parseApiResponse(response, "Failed to delete contact.");
 
       if (!response.ok) {
         throw new Error(result.message || "Failed to delete contact.");
