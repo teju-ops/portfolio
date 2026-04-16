@@ -6,9 +6,13 @@ export default function Navbar({ activeSection, scrollTo }) {
       <div className="nav-inner">
         <span className="logo">Tejaswin.M</span>
         <div className="nav-links">
-          {["home", "proficiency", "about", "contact"].map((s) => (
-            <button key={s} className={`nav-link ${activeSection === s ? "active" : ""}`} onClick={() => scrollTo(s)}>
-              {s.charAt(0).toUpperCase() + s.slice(1)}
+          {["home", "proficiency", "projects", "about", "contact", "admin"].map((section) => (
+            <button
+              key={section}
+              className={`nav-link ${activeSection === section ? "active" : ""}`}
+              onClick={() => scrollTo(section)}
+            >
+              {section.charAt(0).toUpperCase() + section.slice(1)}
             </button>
           ))}
           <a
@@ -17,7 +21,7 @@ export default function Navbar({ activeSection, scrollTo }) {
             target="_blank"
             rel="noreferrer"
           >
-            Resume
+            GitHub
           </a>
         </div>
       </div>

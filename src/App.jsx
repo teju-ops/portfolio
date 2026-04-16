@@ -5,6 +5,7 @@ import Proficiency from "./components/Proficiency";
 import Projects from "./components/Projects";
 import About from "./components/About";
 import Contact from "./components/Contact";
+import AdminPanel from "./components/AdminPanel";
 import Footer from "./components/Footer";
 import "./index.css";
 
@@ -12,6 +13,7 @@ export default function App() {
   const [scrollProgress, setScrollProgress] = useState(0);
   const [activeSection, setActiveSection] = useState("home");
   const revealRefs = useRef([]);
+  const observerRef = useRef(null);
 
   useEffect(() => {
     const onScroll = () => {
@@ -19,7 +21,7 @@ export default function App() {
       const pct = h.scrollTop / (h.scrollHeight - h.clientHeight);
       setScrollProgress(pct);
 
-      const sections = ["home", "proficiency", "projects", "about", "contact"];
+      const sections = ["home", "proficiency", "projects", "about", "contact", "admin"];
       for (const id of sections) {
         const el = document.getElementById(id);
         if (el) {
@@ -37,12 +39,19 @@ export default function App() {
       (entries) => entries.forEach((e) => { if (e.isIntersecting) e.target.classList.add("visible"); }),
       { threshold: 0.15 }
     );
+    observerRef.current = obs;
     revealRefs.current.forEach((el) => el && obs.observe(el));
-    return () => obs.disconnect();
+    return () => {
+      obs.disconnect();
+      observerRef.current = null;
+    };
   }, []);
 
   const addReveal = useCallback((el) => {
-    if (el && !revealRefs.current.includes(el)) revealRefs.current.push(el);
+    if (el && !revealRefs.current.includes(el)) {
+      revealRefs.current.push(el);
+      observerRef.current?.observe(el);
+    }
   }, []);
 
   const scrollTo = (id) => {
@@ -58,7 +67,8 @@ export default function App() {
       <Projects addReveal={addReveal} />
       <About addReveal={addReveal} />
       <Contact addReveal={addReveal} />
-      <Footer />
+      <AdminPanel addReveal={addReveal} />
+      <Footer scrollTo={scrollTo} />
     </>
   );
 }

@@ -1,6 +1,67 @@
-import React from "react";
+import React, { useState } from "react";
+import { buildApiUrl } from "../lib/api";
 
 export default function Contact({ addReveal }) {
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    message: "",
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [status, setStatus] = useState({ type: "", message: "" });
+
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setFormData((current) => ({ ...current, [name]: value }));
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    const trimmedData = {
+      name: formData.name.trim(),
+      email: formData.email.trim(),
+      message: formData.message.trim(),
+    };
+
+    if (!trimmedData.name || !trimmedData.email || !trimmedData.message) {
+      setStatus({ type: "error", message: "Please fill in all the contact fields." });
+      return;
+    }
+
+    setIsSubmitting(true);
+    setStatus({ type: "", message: "" });
+
+    try {
+      const response = await fetch(buildApiUrl("/api/contact"), {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(trimmedData),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.message || "Unable to send your message right now.");
+      }
+
+      setFormData({ name: "", email: "", message: "" });
+      setStatus({
+        type: "success",
+        message: "Thanks for reaching out. Your message has been saved successfully.",
+      });
+    } catch (error) {
+      setStatus({
+        type: "error",
+        message: error.message || "Something went wrong while sending your message.",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <section id="contact" className="section-contact">
       <div className="contact-inner">
@@ -8,25 +69,54 @@ export default function Contact({ addReveal }) {
         <p className="contact-sub reveal" ref={addReveal}>
           Have a project in mind or want to discuss technical challenges? Reach out and TK will get back to you shortly.
         </p>
-        <div className="contact-form reveal" ref={addReveal}>
+        <form className="contact-form reveal" ref={addReveal} onSubmit={handleSubmit} noValidate>
           <div>
-            <label className="field-label">Full Name</label>
-            <input className="field-input" type="text" placeholder="Your name" />
+            <label className="field-label" htmlFor="contact-name">Full Name</label>
+            <input
+              id="contact-name"
+              className="field-input"
+              type="text"
+              name="name"
+              placeholder="Your name"
+              value={formData.name}
+              onChange={handleChange}
+            />
           </div>
           <div>
-            <label className="field-label">Email Address</label>
-            <input className="field-input" type="email" placeholder="your@email.com" />
+            <label className="field-label" htmlFor="contact-email">Email Address</label>
+            <input
+              id="contact-email"
+              className="field-input"
+              type="email"
+              name="email"
+              placeholder="your@email.com"
+              value={formData.email}
+              onChange={handleChange}
+            />
           </div>
           <div className="field-full">
-            <label className="field-label">Your Message</label>
-            <textarea className="field-textarea" rows={4} placeholder="Tell me about your project..." />
+            <label className="field-label" htmlFor="contact-message">Your Message</label>
+            <textarea
+              id="contact-message"
+              className="field-textarea"
+              rows={4}
+              name="message"
+              placeholder="Tell me about your project..."
+              value={formData.message}
+              onChange={handleChange}
+            />
+          </div>
+          <div className="field-full">
+            <p className={`contact-status ${status.type}`} aria-live="polite">
+              {status.message}
+            </p>
           </div>
           <div className="field-full contact-submit">
-            <button className="btn-primary">
+            <button className="btn-primary" type="submit" disabled={isSubmitting}>
               Send Message →
             </button>
           </div>
-        </div>
+        </form>
       </div>
     </section>
   );
