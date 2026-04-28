@@ -26,19 +26,33 @@ export default function Projects({ addReveal }) {
           </div>
           <div className="carousel-track" ref={carouselRef}>
             {projects.map((p) => (
-              <div key={p.title} className="project-card">
-                <div className="project-img" style={{ background: p.bg }}>
-                  <img src={p.img} alt={p.title} />
-                  {p.badge && <span className="project-badge">{p.badge}</span>}
-                </div>
-                <div className="project-body">
-                  <div className="project-title">{p.title}</div>
-                  <div className="project-desc">{p.desc}</div>
-                  <div className="project-tags">
-                    {p.tags.map((t) => <span key={t} className="project-tag">{t}</span>)}
+              <a
+                key={p.title}
+                className="project-card-link"
+                href={p.url || "#"}
+                target={p.url ? "_blank" : undefined}
+                rel={p.url ? "noreferrer" : undefined}
+              >
+                <div className="project-card">
+                  <div className="project-img" style={{ background: p.bg }}>
+                    <img src={p.img} alt={p.title} />
+                    {p.badge && <span className="project-badge">{p.badge}</span>}
+                  </div>
+                  <div className="project-body">
+                    <div className="project-title">{p.title}</div>
+                    <div className="project-desc">{p.desc}</div>
+                    {(p.challenge || p.stack) && (
+                      <div className="project-detail-list">
+                        {p.challenge && <div className="project-detail">{p.challenge}</div>}
+                        {p.stack && <div className="project-detail">{p.stack}</div>}
+                      </div>
+                    )}
+                    <div className="project-tags">
+                      {p.tags.map((t) => <span key={t} className="project-tag">{t}</span>)}
+                    </div>
                   </div>
                 </div>
-              </div>
+              </a>
             ))}
           </div>
         </div>

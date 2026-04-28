@@ -290,6 +290,10 @@ nav {
   padding-bottom: 2rem;
 }
 .carousel-track::-webkit-scrollbar { display: none; }
+.project-card-link {
+  text-decoration: none;
+  color: inherit;
+}
 .project-card {
   min-width: 420px; scroll-snap-align: start;
   background: var(--surface-container-lowest); border-radius: 1rem;
@@ -316,6 +320,16 @@ nav {
 .project-body { padding: 2rem; }
 .project-title { font-weight: 800; font-size: 1.2rem; color: var(--primary); margin-bottom: 0.75rem; }
 .project-desc { font-size: 0.85rem; color: var(--on-surface-variant); line-height: 1.7; margin-bottom: 1rem; }
+.project-detail-list {
+  display: grid;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+.project-detail {
+  font-size: 0.8rem;
+  line-height: 1.6;
+  color: var(--secondary);
+}
 .project-tags { display: flex; flex-wrap: wrap; gap: 6px; }
 .project-tag {
   font-size: 0.65rem; font-weight: 800; text-transform: uppercase;
